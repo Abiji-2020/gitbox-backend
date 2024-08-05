@@ -2,24 +2,17 @@ package gitbox;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
-import java.util.Arrays;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 @SpringBootApplication
-@RestController
+@EnableJpaRepositories("gitbox.Repositry")
+@EntityScan("gitbox.models")
+@ComponentScan("gitbox")
 public class GitboxApplication {
 
-	@GetMapping("/")
-	public String home() {
-		return "Hello World!";
-	}
-
-	public static void main(String[] args) {
-		SpringApplication.run(GitboxApplication.class, args);
-	}
-
+    public static void main(String[] args) {
+        SpringApplication.run(GitboxApplication.class, args);
+    }
 }

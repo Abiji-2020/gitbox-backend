@@ -9,5 +9,4 @@ public interface UserRepositry extends JpaRepository<UserTable, Long> {
     UserTable findByUsername(String username);
     UserTable findByEmail(String email);
     UserTable findByUsernameAndPassword(String username, String password);
-    String getPassword();
 }
