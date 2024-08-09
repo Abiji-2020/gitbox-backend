@@ -9,23 +9,30 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Optional;
+import java.security.SecureRandom;
+import java.math.BigInteger;
+
 
 @RestController
 public class Login {
 
+
+    private static SecureRandom random = new SecureRandom();
+    
     @Autowired
     private UserRepositry userRepositry;
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginDetails loginDetails) {
         Optional<UserTable> user = userRepositry.findById(loginDetails.getId());
-
+        String token = new BigInteger(130, random).toString(32);
         if (user.isEmpty()) {
-            return new ResponseEntity<>(new LoginResponse("User not found", null), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new LoginResponse("User not found", token), HttpStatus.NOT_FOUND);
         }
 
         UserTable userDetails = user.get();
         if (userDetails.getPassword().equals(loginDetails.getPassword())) {
+            
             return new ResponseEntity<>(new LoginResponse("Login successful", "token"), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(new LoginResponse("Invalid password", null), HttpStatus.UNAUTHORIZED);
@@ -104,3 +111,4 @@ class LoginDetails {
         this.email = email;
     }
 }
+
