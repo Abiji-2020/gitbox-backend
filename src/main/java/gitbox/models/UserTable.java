@@ -14,14 +14,16 @@ public class UserTable {
     private String username;
     private String password;
     private String email;
+    private String token;
 
     public UserTable() {
     }
 
-    public UserTable(String username, String password, String email) {
+    public UserTable(String username, String password, String email, String token) {
         this.username = username;
         this.password = password;
         this.email = email;
+        this.token = token;
     }
 
     public Long getId() {
@@ -42,6 +44,12 @@ public class UserTable {
 
     public String getPassword() {
         return password;
+    }
+    public String  getToken(){
+        return token;
+    }
+    public void setToken(String token){
+        this.token = token;
     }
 
     public void setPassword(String password) {

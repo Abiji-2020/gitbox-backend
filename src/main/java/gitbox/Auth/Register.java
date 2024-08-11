@@ -14,38 +14,32 @@ import java.math.BigInteger;
 
 
 @RestController
-public class Login {
-
+public class Register {
 
     private static SecureRandom random = new SecureRandom();
-    
+
     @Autowired
     private UserRepositry userRepositry;
 
-    @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginDetails loginDetails) {
-        UserTable user = userRepositry.findByEmail(loginDetails.getEmail());
+    @PostMapping("/register")
+    public ResponseEntity<RegisterResponse> register(@RequestBody RegisterDetails registerDetails) {
         String token = new BigInteger(130, random).toString(32);
-        if (user == null) {
-            return new ResponseEntity<>(new LoginResponse(loginDetails.getEmail(),"User not found", null), HttpStatus.NOT_FOUND);
+        UserTable user = userRepositry.findByEmail(registerDetails.getEmail());
+        if (user != null) {
+            return new ResponseEntity<>(new RegisterResponse(registerDetails.getEmail(),"User already exists", null), HttpStatus.CONFLICT);
         }
-
-       // UserTable userDetails = user.get();
-        if (user.getPassword().equals(loginDetails.getPassword())) {
-            
-            return new ResponseEntity<>(new LoginResponse(loginDetails.getEmail(),"Login successful", token), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(new LoginResponse(loginDetails.getEmail(),"Invalid password", null), HttpStatus.UNAUTHORIZED);
-        }
+        user = new UserTable(registerDetails.getUsername(), registerDetails.getPassword(), registerDetails.getEmail(), token);
+        userRepositry.save(user);
+        return new ResponseEntity<>(new RegisterResponse(registerDetails.getEmail(),"User created successfully", token), HttpStatus.CREATED);
     }
 }
 
-class LoginResponse {
+class RegisterResponse {
     private String email;
     private String message;
     private String token;
 
-    public LoginResponse(String email, String message, String token) {
+    public RegisterResponse(String email, String message, String token) {
         this.email = email;
         this.message = message;
         this.token = token;
@@ -60,7 +54,6 @@ class LoginResponse {
     public String getMessage() {
         return message;
     }
-
     public void setMessage(String message) {
         this.message = message;
     }
@@ -68,26 +61,31 @@ class LoginResponse {
     public String getToken() {
         return token;
     }
-
     public void setToken(String token) {
         this.token = token;
     }
 }
 
-class LoginDetails {
+class RegisterDetails {
+    private String username;
     private String password;
     private String email;
 
-    public LoginDetails( String email, String password) {
+    public RegisterDetails(String username, String password, String email) {
+        this.username = username;
         this.password = password;
         this.email = email;
     }
-    public LoginDetails() {
+    public String getUsername() {
+        return username;
     }
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public String getPassword() {
         return password;
     }
-
     public void setPassword(String password) {
         this.password = password;
     }
@@ -95,9 +93,7 @@ class LoginDetails {
     public String getEmail() {
         return email;
     }
-
     public void setEmail(String email) {
         this.email = email;
     }
 }
-
