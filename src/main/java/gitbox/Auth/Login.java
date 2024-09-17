@@ -27,15 +27,15 @@ public class Login {
         UserTable user = userRepositry.findByEmail(loginDetails.getEmail());
         String token = new BigInteger(130, random).toString(32);
         if (user == null) {
-            return new ResponseEntity<>(new LoginResponse(loginDetails.getEmail(),"User not found", null), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new LoginResponse(loginDetails.getEmail(),"User not found", null,null), HttpStatus.NOT_FOUND);
         }
 
        // UserTable userDetails = user.get();
         if (user.getPassword().equals(loginDetails.getPassword())) {
             
-            return new ResponseEntity<>(new LoginResponse(loginDetails.getEmail(),"Login successful", token), HttpStatus.OK);
+            return new ResponseEntity<>(new LoginResponse(loginDetails.getEmail(),"Login successful", token,user.getUsername()), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(new LoginResponse(loginDetails.getEmail(),"Invalid password", null), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(new LoginResponse(loginDetails.getEmail(),"Invalid password", null,null), HttpStatus.UNAUTHORIZED);
         }
     }
 }
@@ -44,11 +44,13 @@ class LoginResponse {
     private String email;
     private String message;
     private String token;
+    private String username;
 
-    public LoginResponse(String email, String message, String token) {
+    public LoginResponse(String email, String message, String token, String username) {
         this.email = email;
         this.message = message;
         this.token = token;
+        this.username = username;
     }
     public String getEmail() {
         return email;
@@ -71,6 +73,12 @@ class LoginResponse {
 
     public void setToken(String token) {
         this.token = token;
+    }
+    public String getUsername() {
+        return username;
+    }
+    public void setUsername(String username) {
+        this.username = username;
     }
 }
 

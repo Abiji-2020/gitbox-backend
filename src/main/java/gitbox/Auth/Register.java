@@ -30,7 +30,7 @@ public class Register {
         }
         user = new UserTable(registerDetails.getUsername(), registerDetails.getPassword(), registerDetails.getEmail(), token);
         userRepositry.save(user);
-        return new ResponseEntity<>(new RegisterResponse(registerDetails.getEmail(),"User created successfully", token), HttpStatus.CREATED);
+        return new ResponseEntity<>(new RegisterResponse(registerDetails.getEmail(),"User created successfully", token, registerDetails.getUsername()), HttpStatus.CREATED);
     }
 }
 
@@ -38,11 +38,13 @@ class RegisterResponse {
     private String email;
     private String message;
     private String token;
+    private String username;
 
-    public RegisterResponse(String email, String message, String token) {
+    public RegisterResponse(String email, String message, String token, String username) {
         this.email = email;
         this.message = message;
         this.token = token;
+        this.username = username;
     }
     public String getEmail() {
         return email;
@@ -63,6 +65,12 @@ class RegisterResponse {
     }
     public void setToken(String token) {
         this.token = token;
+    }
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    public String getUsername() {
+        return username;
     }
 }
 
