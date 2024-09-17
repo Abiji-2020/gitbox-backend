@@ -37,7 +37,7 @@ public class ProjectService {
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
-            String sql = "DROP TABLE IF EXISTS" + TableName;
+            String sql = "DROP TABLE IF EXISTS " + TableName;
             session.createNativeQuery(sql).executeUpdate();
             tx.commit();
         } catch (Exception e) {
