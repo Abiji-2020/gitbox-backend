@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
-import java.util.Optional;
 import java.security.SecureRandom;
 import java.math.BigInteger;
 
@@ -26,7 +25,7 @@ public class Register {
         String token = new BigInteger(130, random).toString(32);
         UserTable user = userRepositry.findByEmail(registerDetails.getEmail());
         if (user != null) {
-            return new ResponseEntity<>(new RegisterResponse(registerDetails.getEmail(),"User already exists", null), HttpStatus.CONFLICT);
+            return new ResponseEntity<>(new RegisterResponse(registerDetails.getEmail(),"User already exists", null,null), HttpStatus.CONFLICT);
         }
         user = new UserTable(registerDetails.getUsername(), registerDetails.getPassword(), registerDetails.getEmail(), token);
         userRepositry.save(user);

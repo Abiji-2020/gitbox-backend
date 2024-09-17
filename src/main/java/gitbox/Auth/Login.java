@@ -8,17 +8,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
-import java.util.Optional;
 import java.security.SecureRandom;
 import java.math.BigInteger;
-
 
 @RestController
 public class Login {
 
-
     private static SecureRandom random = new SecureRandom();
-    
+
     @Autowired
     private UserRepositry userRepositry;
 
@@ -27,15 +24,19 @@ public class Login {
         UserTable user = userRepositry.findByEmail(loginDetails.getEmail());
         String token = new BigInteger(130, random).toString(32);
         if (user == null) {
-            return new ResponseEntity<>(new LoginResponse(loginDetails.getEmail(),"User not found", null,null), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new LoginResponse(loginDetails.getEmail(), "User not found", null, null),
+                    HttpStatus.NOT_FOUND);
         }
 
-       // UserTable userDetails = user.get();
+        // UserTable userDetails = user.get();
         if (user.getPassword().equals(loginDetails.getPassword())) {
-            
-            return new ResponseEntity<>(new LoginResponse(loginDetails.getEmail(),"Login successful", token,user.getUsername()), HttpStatus.OK);
+
+            return new ResponseEntity<>(
+                    new LoginResponse(loginDetails.getEmail(), "Login successful", token, user.getUsername()),
+                    HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(new LoginResponse(loginDetails.getEmail(),"Invalid password", null,null), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(new LoginResponse(loginDetails.getEmail(), "Invalid password", null, null),
+                    HttpStatus.UNAUTHORIZED);
         }
     }
 }
@@ -52,9 +53,11 @@ class LoginResponse {
         this.token = token;
         this.username = username;
     }
+
     public String getEmail() {
         return email;
     }
+
     public void setEmail(String email) {
         this.email = email;
     }
@@ -74,9 +77,11 @@ class LoginResponse {
     public void setToken(String token) {
         this.token = token;
     }
+
     public String getUsername() {
         return username;
     }
+
     public void setUsername(String username) {
         this.username = username;
     }
@@ -86,12 +91,14 @@ class LoginDetails {
     private String password;
     private String email;
 
-    public LoginDetails( String email, String password) {
+    public LoginDetails(String email, String password) {
         this.password = password;
         this.email = email;
     }
+
     public LoginDetails() {
     }
+
     public String getPassword() {
         return password;
     }
@@ -108,4 +115,3 @@ class LoginDetails {
         this.email = email;
     }
 }
-
