@@ -2,6 +2,7 @@ package gitbox.Projects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,9 +42,97 @@ public class ProjectController {
     ) {
         return ResponseEntity.ok( new getProjectsResponse(projectUserService.getProjects(projectRequest.getUsername())));
     }
+    @DeleteMapping("/delete")
+    public ResponseEntity<CreateTableResponse> deleteProject(@RequestBody CreateTableRequest projectRequest) {
+        String tableName = projectRequest.getUsername();
+        tableName = tableName.replaceAll("[^a-zA-Z0-9_]", "");
+        projectUserService.dropProjectTable(tableName);
+        return ResponseEntity.ok(new CreateTableResponse(tableName + " table deleted successfully"));
+    }
+
+    @PostMapping("/update")
+    public ResponseEntity<updateResponse> updateProject(@RequestBody updateRequest projectRequest) {
+        String tableName = projectRequest.getUsername();
+        tableName = tableName.replaceAll("[^a-zA-Z0-9_]", "");
+        projectUserService.updateProject(tableName, projectRequest.getProjectName(), projectRequest.getProjectDescription(),
+                projectRequest.getVersion(), projectRequest.getLink());
+        return ResponseEntity.ok(new updateResponse("Project updated successfully"));
+    }
 }
 
 // Models used in the request and response
+
+class updateRequest{
+    private String username;
+    private String projectName;
+    private String projectDescription;
+    private String version;
+    private String link;
+
+    public updateRequest(String username, String projectName, String projectDescription, String version, String link) {
+        this.username = username;
+        this.projectName = projectName;
+        this.projectDescription = projectDescription;
+        this.version = version;
+        this.link = link;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public String getProjectDescription() {
+        return projectDescription;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public void setProjectDescription(String projectDescription) {
+        this.projectDescription = projectDescription;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+}
+
+class updateResponse{
+    private String message;
+
+    public updateResponse(String message) {
+        this.message = message;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+}
 
 class getProjectsRequest {
     private String username;

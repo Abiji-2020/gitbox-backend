@@ -24,6 +24,7 @@ dependencies {
 	implementation group: 'javax.persistence', name: 'javax.persistence-api', version: '2.2'
 	implementation 'mysql:mysql-connector-java:8.0.33'
 	implementation 'org.postgresql:postgresql:42.6.0'
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.3'
 	runtimeOnly 'org.postgresql:postgresql'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'

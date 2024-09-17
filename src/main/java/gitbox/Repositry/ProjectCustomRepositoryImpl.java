@@ -40,14 +40,14 @@ public class ProjectCustomRepositoryImpl implements ProjectCustomRepository {
     }
 
     @Override
-    public void updateProject(String tableName, String projectName, String projectDescription, String version, String link, int id) {
-        String sql = "UPDATE " + tableName + " SET projectName = :projectName, projectDescription = :projectDescription, version = :version, link = :link WHERE id = :id";
+    public void updateProject(String tableName, String projectName, String projectDescription, String version, String link) {
+        String sql = "UPDATE " + tableName + " SET projectDescription = :projectDescription, version = :version, link = :link WHERE projectName = :projectName";
         Query query = entityManager.createNativeQuery(sql);
-        query.setParameter("projectName", projectName);
+        
         query.setParameter("projectDescription", projectDescription);
         query.setParameter("version", version);
         query.setParameter("link", link);
-        query.setParameter("id", id);
+        query.setParameter("projectName", projectName);
         query.executeUpdate();
     }
 }

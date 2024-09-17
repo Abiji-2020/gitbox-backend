@@ -32,8 +32,8 @@ public class ProjectUserService {
         projectRepository.deleteProject(tableName, projectName);
     }
     @Transactional
-    public void updateProject(String tableName, String projectName, String projectDescription, String version, String link, int id) {
-        projectRepository.updateProject(tableName, projectName, projectDescription, version, link, id);
+    public void updateProject(String tableName, String projectName, String projectDescription, String version, String link) {
+        projectRepository.updateProject(tableName, projectName, projectDescription, version, link);
     }
 
     @Transactional
