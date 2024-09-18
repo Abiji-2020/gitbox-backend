@@ -2,7 +2,6 @@ package gitbox.BranchedRepo;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -78,7 +77,7 @@ public class BranchedRepo {
     @GetMapping("/getLatest")
     public ResponseEntity<RepoEntity> getLatest(@RequestBody getLatestRequest request) {
 
-        List<RepoBranch> repoBranch = repoBranchRepositry.findByUsername(request.getUsername());
+        List<RepoBranch> repoBranch = repoBranchRepositry.findByUsernameAndRepoNameAndBranchName(request.getUsername(),request.getRepoName(),request.getBranchName());
         Collections.sort(repoBranch, (a, b) -> a.getEditedAt().compareTo(b.getEditedAt()));
         int index = repoBranch.size() - 1;
         return ResponseEntity.ok(convertToRepoEntity(repoBranch.get(index)));
