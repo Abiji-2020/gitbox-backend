@@ -7,11 +7,12 @@ import jakarta.persistence.Lob;
 
 @Entity
 public class RepoBranch {
-    @Id
+    
     private String specialId;
     private String username;
     private String repoName;
     private String branchName;
+    @Id
     private String commit;
     private String editedAt;
     @Lob
