@@ -2,7 +2,7 @@ package gitbox.BranchedRepo;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.GetMapping;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +16,9 @@ import java.util.List;
 import java.util.Collections;
 import java.util.ArrayList;
 
-import gitbox.models.RepoBranch;
+import gitbox.models.RepoBranch;    
 import gitbox.Repositry.RepoBranchRepositry;
+
 
 @RestController
 @RequestMapping("/branchedRepo")
@@ -29,9 +30,11 @@ public class BranchedRepo {
     @PostMapping("/create")
     public ResponseEntity<RepoBranch> createRepo(@RequestBody RepoEntity folder) {
 
+
         byte[] byteFolder = convertToByteArray(folder);
 
         System.out.println(folder);
+
         RepoBranch repoBranch = new RepoBranch(folder.getUsername(), folder.getRepoName(), folder.getBranchName(),
                 folder.getFolderMetadata().getCommit(), folder.getFolderMetadata().getEditedAt(), byteFolder);
         repoBranchRepositry.save(repoBranch);
@@ -62,7 +65,7 @@ public class BranchedRepo {
         }
     }
 
-    @GetMapping("/getAll")
+    @PostMapping("/getAll")
     public ResponseEntity<Iterable<RepoEntity>> getAllRepos(@RequestBody getAllRequest request) {
         List<RepoBranch> repoBranch = repoBranchRepositry.findByUsername(request.getUsername());
         Collections.sort(repoBranch, (a, b) -> a.getEditedAt().compareTo(b.getEditedAt()));
@@ -74,7 +77,7 @@ public class BranchedRepo {
 
     }
 
-    @GetMapping("/getLatest")
+    @PostMapping("/getLatest")
     public ResponseEntity<RepoEntity> getLatest(@RequestBody getLatestRequest request) {
 
         List<RepoBranch> repoBranch = repoBranchRepositry.findByUsernameAndRepoNameAndBranchName(request.getUsername(),request.getRepoName(),request.getBranchName());
@@ -93,7 +96,7 @@ public class BranchedRepo {
                 folder.getFolderMetadata().getCommit(), folder.getFolderMetadata().getEditedAt(), byteFolder);
         repoBranchRepositry.save(repoBranch);
 
-        return ResponseEntity.ok(new updateResponse("Updated Successfully" + repoBranch.getRepoName()));
+        return ResponseEntity.ok(new updateResponse("Updated Successfully Repo Updated: " + repoBranch.getRepoName()));
     }
 
 }

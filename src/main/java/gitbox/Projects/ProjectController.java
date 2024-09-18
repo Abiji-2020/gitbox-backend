@@ -36,11 +36,14 @@ public class ProjectController {
         return ResponseEntity.ok(new AddProjectResponse(tableName + " project added successfully"));
     }
 
-    @GetMapping("/get")
+    @PostMapping("/get")
     public ResponseEntity<getProjectsResponse> getProjects(
             @RequestBody getProjectsRequest projectRequest
     ) {
-        return ResponseEntity.ok( new getProjectsResponse(projectUserService.getProjects(projectRequest.getUsername())));
+        String tableName = projectRequest.getUsername();
+        tableName = tableName.replaceAll("[^a-zA-Z0-9_]", "");
+
+        return ResponseEntity.ok( new getProjectsResponse(projectUserService.getProjects(tableName)));
     }
     @DeleteMapping("/delete")
     public ResponseEntity<CreateTableResponse> deleteProject(@RequestBody CreateTableRequest projectRequest) {

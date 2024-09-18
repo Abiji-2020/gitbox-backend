@@ -2,7 +2,6 @@ package gitbox.BranchedRepo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import jakarta.persistence.Transient;
 
 import java.io.Serializable;
 
